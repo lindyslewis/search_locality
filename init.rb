@@ -10,7 +10,8 @@
 #
 # Attach the source files as a zip to the Jira ticket
 
-require'rspec'
+require 'rspec'
+require_relative 'lib/search'
 
 class Init
 
@@ -21,7 +22,9 @@ class Init
 
 	def run_search
 		puts "Running search for #{@string1}."
-    puts "Running search for #{@string2}." 
+    puts "Running search for #{@string2}."
+		locality_search = Search.new(@string1, @string2)
+		locality_search.search_for_strings 
   end
 
 end
