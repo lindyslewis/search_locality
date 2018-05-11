@@ -15,15 +15,14 @@ require_relative 'lib/search'
 
 class Init
 
-	def initialize(string1, string2)
+	def initialize(distance, string1, string2)
+		@distance = distance
 		@string1 = string1
 		@string2 = string2
 	end
 
 	def run_search
-		puts "Running search for #{@string1}."
-    puts "Running search for #{@string2}."
-		locality_search = Search.new(@string1, @string2)
+		locality_search = Search.new(@distance, @string1, @string2)
 		locality_search.search_for_strings 
   end
 
@@ -32,20 +31,25 @@ end
 def run_cli
 	
 	def usage
-		puts "usage: init.rb 'string 1' string2";
+		puts "usage: init.rb distance 'string 1' string2";
 		exit 1
 	end 
 
-  if ARGV.length != 2
+  if ARGV.length != 3
 		usage
 	end
 
-  string1 = ARGV[0].to_s 
-	string2 = ARGV[1].to_s
+  distance = ARGV[0].to_i
+  string1 = ARGV[1].to_s 
+	string2 = ARGV[2].to_s
 
-	locality_search_initialize = Init.new(string1, string2)
-	locality_search_initialize.run_search
-	
+	if distance.is_a? Integer
+		locality_search_initialize = Init.new(distance, string1, string2)
+		locality_search_initialize.run_search
+	else
+		usage
+	end
+
 end
 
 run_cli

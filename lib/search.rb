@@ -1,11 +1,12 @@
 class Search 
-	def initialize(string1, string2)
+	def initialize(distance, string1, string2)
+		@distance = distance
 		@string1 = string1
 		@string2 = string2
 	end
 
 	def search_for_strings
-		puts "Inside Search.search_for_strings.  String1: #{@string1}. String2: #{@string2}."
+		puts "Searching for '#{@string1}' and '#{@string2}' to appear within #{@distance} words of one another."
 	end
 
 end
