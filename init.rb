@@ -15,14 +15,15 @@ require_relative 'lib/search'
 
 class Init
 
-	def initialize(distance, string1, string2)
+	def initialize(distance, directory_path, string1, string2)
 		@distance = distance
+		@directory_path = directory_path
 		@string1 = string1
 		@string2 = string2
 	end
 
 	def run_search
-		locality_search = Search.new(@distance, @string1, @string2)
+		locality_search = Search.new(@distance, @directory_path, @string1, @string2)
 		locality_search.search_for_strings 
   end
 
@@ -31,20 +32,21 @@ end
 def run_cli
 	
 	def usage
-		puts "usage: init.rb distance 'string 1' string2";
+		puts "usage: init.rb distance 'directory path' 'string 1' string2";
 		exit 1
 	end 
 
-  if ARGV.length != 3
+  if ARGV.length != 4
 		usage
 	end
 
   distance = ARGV[0].to_i
-  string1 = ARGV[1].to_s 
-	string2 = ARGV[2].to_s
+  directory_path = ARGV[1].to_s
+  string1 = ARGV[2].to_s 
+	string2 = ARGV[3].to_s
 
 	if distance.is_a? Integer
-		locality_search_initialize = Init.new(distance, string1, string2)
+		locality_search_initialize = Init.new(distance, directory_path, string1, string2)
 		locality_search_initialize.run_search
 	else
 		usage
