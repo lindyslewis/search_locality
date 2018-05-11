@@ -7,12 +7,22 @@
 # 2. Return the set of documents where two search terms 
 #          occur whithin N words of each other
 # 3. Extra Credit: Allow the user to specify phrases instead of terms
-
+#
 # Attach the source files as a zip to the Jira ticket
 
 require'rspec'
 
 class Init
+
+	def initialize(string1, string2)
+		@string1 = string1
+		@string2 = string2
+	end
+
+	def run_search
+		puts "Running search for #{@string1}."
+    puts "Running search for #{@string2}." 
+  end
 
 end
 
@@ -30,10 +40,9 @@ def run_cli
   string1 = ARGV[0].to_s 
 	string2 = ARGV[1].to_s
 
-  puts "Your first string is #{string1}."
-  puts "Your second string is #{string2}."
-
+	locality_search_initialize = Init.new(string1, string2)
+	locality_search_initialize.run_search
+	
 end
 
 run_cli
-
