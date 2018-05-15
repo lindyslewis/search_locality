@@ -46,5 +46,22 @@ describe Search do
     expect(is_match). to eq false
   end
 
+  it "Searches an array for two strings" do
+    test_search = Search.new(2, 'test_data', 'I kinda', 'French')
+    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
+    string1 = "Once upon"
+    string2 = "a time"
+    both_found = test_search.search_array_for_two_strings(string1, string2, array_to_search)
+    expect(both_found). to eq true
+  end
+
+  it "Searches an array for two strings" do
+    test_search = Search.new(2, 'test_data', 'I kinda', 'French')
+    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
+    string1 = "Once upon"
+    string2 = "a Neverland"
+    both_found = test_search.search_array_for_two_strings(string1, string2, array_to_search)
+    expect(both_found). to eq false
+  end
 
 end

@@ -42,5 +42,16 @@ class Search
 		end
 	end
 
+	def search_array_for_two_strings(string1, string2, array_to_search)
+		array1 = get_array_of_words_from_string(string1)
+		array2 = get_array_of_words_from_string(string2)
+		string1_found = search_for_array_within_array(array_to_search, array1)
+		string2_found = search_for_array_within_array(array_to_search, array2)
+		if (string1_found && string2_found)
+			return true
+		else
+			return false
+		end
+	end
 
 end
