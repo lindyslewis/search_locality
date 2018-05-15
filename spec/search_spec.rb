@@ -46,22 +46,32 @@ describe Search do
     expect(is_match). to eq false
   end
 
-  it "Searches an array for two strings" do
+  it "Gets an array of index ranges" do
     test_search = Search.new(2, 'test_data', 'I kinda', 'French')
     array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
-    string1 = "Once upon"
-    string2 = "a time"
-    both_found = test_search.search_array_for_two_strings(string1, string2, array_to_search)
-    expect(both_found). to eq true
+    array_to_find = ["in", "Neverland"]
+    index = 1
+    locality = 4
+    is_found = test_search.get_array_of_index_ranges(array_to_search, index, locality)
+    expect(is_found). to eq [0, 1, 2, 3, 4, 5]
   end
 
-  it "Searches an array for two strings" do
+  it "Searches an array based on index range" do
     test_search = Search.new(2, 'test_data', 'I kinda', 'French')
     array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
-    string1 = "Once upon"
-    string2 = "a Neverland"
-    both_found = test_search.search_array_for_two_strings(string1, string2, array_to_search)
-    expect(both_found). to eq false
+    array_to_find = ["in", "Neverland"]
+    index_array = [0, 1, 2, 3, 4, 5]
+    is_found = test_search.search_array_by_index_ranges(array_to_search, array_to_find, index_array)
+    expect(is_found). to eq true
+  end
+
+  it "Searches an array based on index range" do
+    test_search = Search.new(2, 'test_data', 'I kinda', 'French')
+    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
+    array_to_find = ["in", "Lindy"]
+    index_array = [0, 1, 2, 3, 4, 5]
+    is_found = test_search.search_array_by_index_ranges(array_to_search, array_to_find, index_array)
+    expect(is_found). to eq false
   end
 
 end

@@ -35,23 +35,32 @@ class Search
 		index = get_index_of_first_match(array_to_search, array_to_find)
 		length = array_to_find.length
 		new_array = array_to_search.slice(index, length)
-		if new_array == array_to_find
-			return true
-		else
-			return false
-		end
+		new_array == array_to_find
 	end
 
-	def search_array_for_two_strings(string1, string2, array_to_search)
-		array1 = get_array_of_words_from_string(string1)
-		array2 = get_array_of_words_from_string(string2)
-		string1_found = search_for_array_within_array(array_to_search, array1)
-		string2_found = search_for_array_within_array(array_to_search, array2)
-		if (string1_found && string2_found)
-			return true
-		else
-			return false
-		end
+	def get_array_of_index_ranges(array_to_search, index, locality)
+		index - locality < 0 ? first_index = 0 : first_index = index - locality
+		index + locality > array_to_search.length - 1 ? last_index = array_to_search.length : last_index = index + locality
+		return (first_index..last_index).to_a
 	end
+
+	def search_array_by_index_ranges(array_to_search, array_to_find, index_array)
+
+		is_found = false
+		length = array_to_find.length
+
+		index_array.each do |index|
+			new_array = array_to_search.slice(index, length)
+			if new_array == array_to_find
+				is_found = true
+			end
+		end
+
+		return is_found
+
+	end
+
+
+
 
 end
