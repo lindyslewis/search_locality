@@ -10,7 +10,7 @@ require 'search'
 
 describe Search do
 
-  it "Finds three text files in the directory" do
+  it "Finds all text files in a directory" do
     test_search = Search.new(2, 'test_data', 'my first string', 'my second string')
     filepaths = test_search.get_filepaths_from_dir
     expect(filepaths.length).to eq 3
@@ -18,22 +18,33 @@ describe Search do
 
   it "Creates an array containing the words of a file" do
     test_search = Search.new(2, 'test_data', 'I kinda', 'French')
-    array_of_words = test_search.get_array_of_words('test_data/citychickens.txt')
+    array_of_words = test_search.get_array_of_words_from_file('test_data/citychickens.txt')
     expect(array_of_words[4]). to eq 'Hanna'
   end
 
-  it "Should return true if it finds string 1" do
+  it "Gets the index of the first word in the string" do
     test_search = Search.new(2, 'test_data', 'I kinda', 'French')
-    array_of_strings = ["My", "Foo", "Bar"]
-    test_results = test_search.search_for_strings(array_of_strings, 'Foo', 'Bar')
-    expect(test_results).to eq true
+    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
+    array_to_find = ["a", "time"]
+    index = test_search.get_index_of_first_match(array_to_search, array_to_find)
+    expect(index). to eq 2
   end
 
-  it "Should return false if it finds string 1 but not string 2" do
+  it "Checks the rest of the substring for a match" do
     test_search = Search.new(2, 'test_data', 'I kinda', 'French')
-    array_of_strings = ["My", "Foo", "Bar"]
-    test_results = test_search.search_for_strings(array_of_strings, 'Foo', 'Lily')
-    expect(test_results).to eq false
+    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
+    array_to_find = ["in", "Neverland"]
+    is_match = test_search.search_for_array_within_array(array_to_search, array_to_find)
+    expect(is_match). to eq true
   end
+
+  it "Checks the rest of the substring for a match" do
+    test_search = Search.new(2, 'test_data', 'I kinda', 'French')
+    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
+    array_to_find = ["in", "time"]
+    is_match = test_search.search_for_array_within_array(array_to_search, array_to_find)
+    expect(is_match). to eq false
+  end
+
 
 end

@@ -11,22 +11,36 @@ class Search
 		return Dir.glob("#{@directory_path}/*.txt")
   end
 
-	def get_array_of_words(file_path)
+	def get_array_of_words_from_file(file_path)
 		array_of_words = File.open( file_path ) do |file|
 			file.read.split
 		end
 	end
 
-	def search_for_strings(array_of_strings, string1, string2)
-		if array_of_strings.include? string1
-			if array_of_strings.include? string2
-				return true
-			else
-				return false
+	def get_array_of_words_from_string(string)
+		return string.split
+	end
+
+	def get_index_of_first_match(array_to_search, array_to_find)
+		index = 0
+		array_to_search.each do |word|
+			if array_to_find[0] == word
+				return index
 			end
+			index = index + 1
+		end
+	end
+
+	def search_for_array_within_array(array_to_search, array_to_find)
+		index = get_index_of_first_match(array_to_search, array_to_find)
+		length = array_to_find.length
+		new_array = array_to_search.slice(index, length)
+		if new_array == array_to_find
+			return true
 		else
 			return false
 		end
 	end
+
 
 end
