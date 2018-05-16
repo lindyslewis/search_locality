@@ -6,7 +6,7 @@ class Search
 		@directory_path = directory_path
 		@string1_array = clean_array(string1.split)
 		@string2_array = clean_array(string2.split)
-		@results = []
+		@array_of_filepaths_with_positive_results = []
 	end
 
 	def get_filepaths_from_dir
@@ -47,12 +47,48 @@ class Search
 		return -1
 	end
 
-	def get_index_range_to_search_for_string2(array_to_search)
-		index = get_index_of_string1_in_text_array(array_to_search)
-		index - @locality < 0 ? first_index = 0 : first_index = index - @locality
-		index + @locality + @string1_array.length > array_to_search.length - 1 ? last_index = array_to_search.length - 1 : last_index = index + @locality + @string1_array.length
-		return (first_index..last_index).to_a
+	def get_index_array_of_all_occurances_of_string1_in_text_array(array_to_search)
+		length_of_string1_array = @string1_array.length
+		index = 0
+		string1_occurances_index = []
+		array_to_search.each do |word|
+			if @string1_array[0] == word
+				sliced_array = array_to_search.slice(index, length_of_string1_array)
+				if sliced_array == @string1_array
+					string1_occurances_index << index
+				end
+			end
+			index = index + 1
+		end
+		return string1_occurances_index
 	end
+
+	def get_index_range_to_search_for_string2(array_to_search, string1_occurances_index)
+		two_d_index_range_to_search_for_string2 = []
+		string1_occurances_index.each do |index|
+			if index - @locality < 0
+				first_index = 0
+			else
+				first_index = index - @locality
+			end
+			if index + @locality + @string1_array.length > array_to_search.length - 1
+				last_index = array_to_search.length - 1
+			else
+				last_index = index + @locality + @string1_array.length
+			end
+			two_d_index_range_to_search_for_string2 << (first_index..last_index).to_a
+		end
+		flat_array = []
+		iterator = 0
+		two_d_index_range_to_search_for_string2.each do |i|
+			two_d_index_range_to_search_for_string2[iterator].each do |j|
+		  	flat_array << j
+			end
+			iterator = iterator + 1
+		end
+		return flat_array.uniq
+	end
+
 
 	def is_string2_located_within_n_words_of_string1?(array_to_search, index_array)
 		length_of_string2_array = @string2_array.length
@@ -68,17 +104,15 @@ class Search
 
 	def perform_locality_search
 		array_of_filepaths = get_filepaths_from_dir
-		array_of_filepaths_with_positive_results = []
-
 		array_of_filepaths.each do |filepath|
 			text_array = get_array_of_words_from_file(filepath)
-			index_range_array = get_index_range_to_search_for_string2(text_array)
-			locality_search = is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
+			string1_occurances_index = get_index_array_of_all_occurances_of_string1_in_text_array(text_array)
+	    index_range_array = get_index_range_to_search_for_string2(text_array, string1_occurances_index)
+	    locality_search = is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
 			if locality_search == true
-				array_of_filepaths_with_positive_results << filepath
+				@array_of_filepaths_with_positive_results << filepath
 			end
 		end
-
-		return array_of_filepaths_with_positive_results
+		return @array_of_filepaths_with_positive_results
 	end
 end

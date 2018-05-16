@@ -16,7 +16,7 @@ describe Search do
     expect(filepaths.length).to eq 4
   end
 
-  it "Displays a message when the directory does not exist" do
+  it "Returns an empty array when the directory does not exist" do
     test_search = Search.new(2, 'fake_directory', 'Cattleya and Logan', 'best kitties')
     filepaths = test_search.get_filepaths_from_dir
     expect(filepaths).to eq []
@@ -34,31 +34,20 @@ describe Search do
     expect(text_array[12]). to eq 'logan'
   end
 
-  it "Returns location of string1 in test_array or -1 if not found" do
-    test_search = Search.new(2, 'test_data', 'Cattleya and Logan', 'best kitties')
-    text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    is_string_found = test_search.get_index_of_string1_in_text_array(text_array)
-    expect(is_string_found). to eq 10
-  end
-
-  it "Returns location of string1 in test_array or -1 if not found" do
-    test_search = Search.new(2, 'test_data', 'Cattleya and Tim', 'best kitties')
-    text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    is_string_found = test_search.get_index_of_string1_in_text_array(text_array)
-    expect(is_string_found). to eq -1
-  end
-
   it "Gets an array of index ranges to search for string2" do
-    test_search = Search.new(3, 'test_data', 'Cattleya and Logan', 'best kitties')
+    test_search = Search.new(1, 'test_data', 'Cattleya', 'best kitties')
     text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    index_range_array = test_search.get_index_range_to_search_for_string2(text_array)
-    expect(index_range_array). to eq [7, 8, 9, 10, 11, 12]
+    string1_occurances_index = test_search.get_index_array_of_all_occurances_of_string1_in_text_array(text_array)
+    index_range_array = test_search.get_index_range_to_search_for_string2(text_array, string1_occurances_index)
+    expect(index_range_array). to eq [2, 3, 4, 5, 9, 10, 11, 12]
   end
+
 
   it "Finds string2 if it's within n words of string1" do
     test_search = Search.new(3, 'test_data', 'Cattleya and Logan', 'best kitties')
     text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    index_range_array = test_search.get_index_range_to_search_for_string2(text_array)
+    string1_occurances_index = test_search.get_index_array_of_all_occurances_of_string1_in_text_array(text_array)
+    index_range_array = test_search.get_index_range_to_search_for_string2(text_array, string1_occurances_index)
     locality_search = test_search.is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
     expect(locality_search). to eq true
   end
@@ -66,7 +55,8 @@ describe Search do
   it "Return false if string2 if is not within n words of string1" do
     test_search = Search.new(1, 'test_data', 'Logan', 'knows')
     text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    index_range_array = test_search.get_index_range_to_search_for_string2(text_array)
+    string1_occurances_index = test_search.get_index_array_of_all_occurances_of_string1_in_text_array(text_array)
+    index_range_array = test_search.get_index_range_to_search_for_string2(text_array, string1_occurances_index)
     locality_search = test_search.is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
     expect(locality_search). to eq false
   end
@@ -76,6 +66,7 @@ describe Search do
     test_search_results = test_search.perform_locality_search
     expect(test_search_results[1]). to eq 'test_data/kitties.txt'
   end
+
 
   it "Performs locality search" do
     test_search = Search.new(4, 'test_data', 'five foot five', 'height')
@@ -89,5 +80,13 @@ describe Search do
     expect(test_search_results[1]). to eq 'test_data/kitties.txt'
     expect(test_search_results[0]). to eq 'test_data/citychickens.txt'
   end
+
+  it "Finds the text in more than one document" do
+    test_search = Search.new(3, 'test_data', 'Cattleya', 'Logan')
+    test_search_results = test_search.perform_locality_search
+    expect(test_search_results[1]). to eq 'test_data/kitties.txt'
+    expect(test_search_results[0]). to eq 'test_data/citychickens.txt'
+  end
+
 
 end
