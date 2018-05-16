@@ -89,7 +89,6 @@ class Search
 		return flat_array.uniq
 	end
 
-
 	def is_string2_located_within_n_words_of_string1?(array_to_search, index_array)
 		length_of_string2_array = @string2_array.length
 		is_found = false

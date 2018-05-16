@@ -74,19 +74,18 @@ describe Search do
     expect(test_search_results[0]). to eq 'test_data/dreamworld.txt'
   end
 
-  it "Finds the text in more than one document" do
+  it "Finds the results of a context search in more than one document" do
     test_search = Search.new(3, 'test_data', 'Cattleya and Logan', 'best kitties')
     test_search_results = test_search.perform_locality_search
     expect(test_search_results[1]). to eq 'test_data/kitties.txt'
     expect(test_search_results[0]). to eq 'test_data/citychickens.txt'
   end
 
-  it "Finds the text in more than one document" do
+  it "Finds the results of a context search in more than one document" do
     test_search = Search.new(3, 'test_data', 'Cattleya', 'Logan')
     test_search_results = test_search.perform_locality_search
     expect(test_search_results[1]). to eq 'test_data/kitties.txt'
     expect(test_search_results[0]). to eq 'test_data/citychickens.txt'
   end
-
 
 end
