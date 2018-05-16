@@ -1,8 +1,8 @@
 class Search
 	attr_reader :distance, :directory_path, :string1_array, :string2_array
 
-	def initialize(distance, directory_path, string1, string2)
-		@distance = distance
+	def initialize(locality, directory_path, string1, string2)
+		@locality = locality
 		@directory_path = directory_path
 		@string1_array = clean_array(string1.split)
 		@string2_array = clean_array(string2.split)
@@ -33,7 +33,7 @@ class Search
 		return clean_array(text_array)
 	end
 
-	def string1_within_text_array?(array_to_search)
+	def get_index_of_string1_in_text_array(array_to_search)
 		length_of_string1_array = @string1_array.length
 		index = 0
 
@@ -60,29 +60,18 @@ class Search
 	end
 
 
+	def get_index_range_to_search_for_string2(array_to_search)
+		index = get_index_of_string1_in_text_array(array_to_search)
+		puts "Range Function index: #{index}"
 
-
-
-=begin
-		def get_index_of_string1_location(array_to_search)
-			index = 0
-			array_to_search.each do |word|
-				if @string1_array[0] == word
-					return index
-				end
-				index = index + 1
-			end
-			return index
-		end
-	=end
-
-=begin
-	def get_array_of_index_ranges(array_to_search, index, locality)
-		index - locality < 0 ? first_index = 0 : first_index = index - locality
-		index + locality > array_to_search.length - 1 ? last_index = array_to_search.length : last_index = index + locality
+		index - @locality < 0 ? first_index = 0 : first_index = index - @locality
+		index + @locality > array_to_search.length - 1 ? last_index = array_to_search.length - 1 : last_index = index + @locality
 		return (first_index..last_index).to_a
+
 	end
 
+
+=begin
 	def search_array_by_index_ranges(array_to_search, array_to_find, index_array)
 		is_found = false
 		length = array_to_find.length
