@@ -26,7 +26,12 @@ end
 
 def run_search
   locality_search = Search.new(@distance, @directory_path, @string1, @string2)
-  locality_search.search_for_strings
+  search_results = locality_search.perform_locality_search
+  if search_results.empty?
+    puts "No matches found."
+  else
+    puts search_results
+  end
 end
 
 def run_cli

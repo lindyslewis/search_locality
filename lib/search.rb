@@ -44,15 +44,13 @@ class Search
 				index = index + 1
 			end
 		end
-
 		return -1
 	end
-
 
 	def get_index_range_to_search_for_string2(array_to_search)
 		index = get_index_of_string1_in_text_array(array_to_search)
 		index - @locality < 0 ? first_index = 0 : first_index = index - @locality
-		index + @locality > array_to_search.length - 1 ? last_index = array_to_search.length - 1 : last_index = index + @locality
+		index + @locality + @string1_array.length > array_to_search.length - 1 ? last_index = array_to_search.length - 1 : last_index = index + @locality + @string1_array.length
 		return (first_index..last_index).to_a
 	end
 
@@ -68,7 +66,6 @@ class Search
 		return is_found
 	end
 
-
 	def perform_locality_search
 		array_of_filepaths = get_filepaths_from_dir
 		array_of_filepaths_with_positive_results = []
@@ -81,7 +78,7 @@ class Search
 				array_of_filepaths_with_positive_results << filepath
 			end
 		end
-		
+
 		return array_of_filepaths_with_positive_results
 	end
 end
