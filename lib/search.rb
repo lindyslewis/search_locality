@@ -11,11 +11,6 @@ class Search
 
 	def get_filepaths_from_dir
 		array_of_filepaths = Dir.glob("#{@directory_path}/*.txt")
-		if array_of_filepaths.empty?
-			#puts "Did not find any files in #{@directory_path}."
-		else
-			#puts "Searching these files: #{array_of_filepaths}"
-		end
 		return array_of_filepaths
   end
 
@@ -40,13 +35,7 @@ class Search
 		array_to_search.each do |word|
 			if @string1_array[0] == word
 				sliced_array = array_to_search.slice(index, length_of_string1_array)
-				puts " "
-				puts "index: #{index}"
-				puts "sliced_array: #{sliced_array}"
-				puts "@string1_array: #{@string1_array}"
-				puts " "
 				if sliced_array == @string1_array
-					puts "breaking..."
 					return index
 				else
 					index = index + 1
@@ -62,68 +51,37 @@ class Search
 
 	def get_index_range_to_search_for_string2(array_to_search)
 		index = get_index_of_string1_in_text_array(array_to_search)
-		puts "Range Function index: #{index}"
-
 		index - @locality < 0 ? first_index = 0 : first_index = index - @locality
 		index + @locality > array_to_search.length - 1 ? last_index = array_to_search.length - 1 : last_index = index + @locality
 		return (first_index..last_index).to_a
-
 	end
 
-
-=begin
-	def search_array_by_index_ranges(array_to_search, array_to_find, index_array)
+	def is_string2_located_within_n_words_of_string1?(array_to_search, index_array)
+		length_of_string2_array = @string2_array.length
 		is_found = false
-		length = array_to_find.length
-
 		index_array.each do |index|
-			new_array = array_to_search.slice(index, length)
-			if new_array == array_to_find
+			sliced_array = array_to_search.slice(index, length_of_string2_array)
+			if sliced_array == @string2_array
 				is_found = true
 			end
 		end
 		return is_found
 	end
 
+
 	def perform_locality_search
-
 		array_of_filepaths = get_filepaths_from_dir
-		array_to_find = @string1_array
-
-		puts " "
-		puts " "
-		puts " "
-		puts " "
-		#puts " "
-		#puts "@distance: #{@distance}"
-		#puts "@directory_path: #{@directory_path}"
-		#puts "@string1: #{@string1}"
-		#puts "@string2: #{@string2}"
-		#puts "array_of_filepaths: #{array_of_filepaths}"
-		#puts "array_to_find: #{array_to_find}"
+		array_of_filepaths_with_positive_results = []
 
 		array_of_filepaths.each do |filepath|
-
-			array_to_search = get_array_of_words_from_file(filepath)
-			puts " "
-			puts "searching #{filepath}......"
-
-			contains_string1 = string1_within_text_array?(array_to_search, @string1_array)
-			puts "String 1 is found in #{filepath}:  #{contains_string1}"
-
-			if contains_string1
-				index_of_first_match = get_index_of_first_word_in_string1(array_to_search, array_to_find)
-				array_of_index_ranges = get_array_of_index_ranges(array_to_search, index_of_first_match, @distance)
-				contains_string2 = search_array_by_index_ranges(array_to_search, @string2_array, array_of_index_ranges)
-				if (contains_string2 == true)
-					puts "inside results if statement: #{filepath}"
-					@results << filepath
-				end
+			text_array = get_array_of_words_from_file(filepath)
+			index_range_array = get_index_range_to_search_for_string2(text_array)
+			locality_search = is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
+			if locality_search == true
+				array_of_filepaths_with_positive_results << filepath
 			end
 		end
-
-		puts "Match found for #{@string1} and #{@string2} in the following file: #{@results}"
-		return true
+		
+		return array_of_filepaths_with_positive_results
 	end
-=end
 end

@@ -55,55 +55,32 @@ describe Search do
     expect(index_range_array). to eq [7, 8, 9, 10, 11, 12]
   end
 
+  it "Finds string2 if it's within n words of string1" do
+    test_search = Search.new(3, 'test_data', 'Cattleya and Logan', 'best kitties')
+    text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
+    index_range_array = test_search.get_index_range_to_search_for_string2(text_array)
+    locality_search = test_search.is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
+    expect(locality_search). to eq true
+  end
 
-#  it "Should return true if array_to_find is found within array_to_search" do
-#    test_search = Search.new(2, 'test_data', 'in Neverland', 'French')
-#    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
-#    array_to_find = ["in", "Neverland"]
-#    is_match = test_search.string1_within_text_array?(array_to_search)
-#    expect(is_match). to eq true
-#  end
-#
-#  it "Should return false if array_to_find is not found within array_to_search" do
-#    test_search = Search.new(2, 'test_data', 'I kinda', 'French')
-#    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
-#    array_to_find = ["in", "time"]
-#    is_match = test_search.string1_within_text_array?(array_to_search)
-#    expect(is_match). to eq false
-#  end
-#
-#
-#
-#  it "Searches an array based on index range" do
-#    test_search = Search.new(2, 'test_data', 'I kinda', 'French')
-#    array_to_find = ["in", "Neverland"]
-#    index_array = [0, 1, 2, 3, 4, 5]
-#    is_found = test_search.search_array_by_index_ranges(array_to_search, array_to_find, index_array)
-#    expect(is_found). to eq true
-#  end
+  it "Return false if string2 if is not within n words of string1" do
+    test_search = Search.new(1, 'test_data', 'Logan', 'knows')
+    text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
+    index_range_array = test_search.get_index_range_to_search_for_string2(text_array)
+    locality_search = test_search.is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
+    expect(locality_search). to eq false
+  end
 
-#  it "Searches an array based on index range" do
-#    test_search = Search.new(2, 'test_data', 'I kinda', 'French')
-#    array_to_search = ["Once", "upon", "a", "time", "in", "Neverland"]
-#    array_to_find = ["in", "Lindy"]
-#    index_array = [0, 1, 2, 3, 4, 5]
-#    is_found = test_search.search_array_by_index_ranges(array_to_search, array_to_find, index_array)
-#    expect(is_found). to eq false
-#  end
+  it "Performs locality search" do
+    test_search = Search.new(3, 'test_data', 'Cattleya and Logan', 'best kitties')
+    test_search_results = test_search.perform_locality_search
+    expect(test_search_results[0]). to eq 'test_data/kitties.txt'
+  end
 
-#  it "Display an array when search terms are found" do
-#    test_search = Search.new(6, 'test_data', 'When Dot', 'Penny')
-#    expect(test_search.perform_locality_search). to eq true
-#  end
-
-#  it "Display an empty array if no match is found." do
-#    test_search = Search.new(6, 'test_data', 'Tim', 'Lindy')
-#    expect(test_search.perform_locality_search). to eq true
-#  end
-
-#  it "Display an empty array if only one match is found" do
-#    test_search = Search.new(6, 'test_data', 'chemistry', 'lab partner')
-#    expect(test_search.perform_locality_search). to eq true
-#  end
+  it "Performs locality search" do
+    test_search = Search.new(4, 'test_data', 'five foot five', 'height')
+    test_search_results = test_search.perform_locality_search
+    expect(test_search_results[0]). to eq 'test_data/dreamworld.txt'
+  end
 
 end
