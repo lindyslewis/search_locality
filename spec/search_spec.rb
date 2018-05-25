@@ -37,8 +37,8 @@ describe Search do
   it "Gets an array of index ranges to search for string2" do
     test_search = Search.new(1, 'test_data', 'Cattleya', 'best kitties')
     text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    string1_occurances_index = test_search.get_index_array_of_all_occurances_of_string1_in_text_array(text_array)
-    index_range_array = test_search.get_index_range_to_search_for_string2(text_array, string1_occurances_index)
+    string1_occurances_index = test_search.get_string1_index_array(text_array)
+    index_range_array = test_search.get_string2_index_range(text_array, string1_occurances_index)
     expect(index_range_array). to eq [2, 3, 4, 5, 9, 10, 11, 12]
   end
 
@@ -46,18 +46,18 @@ describe Search do
   it "Finds string2 if it's within n words of string1" do
     test_search = Search.new(3, 'test_data', 'Cattleya and Logan', 'best kitties')
     text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    string1_occurances_index = test_search.get_index_array_of_all_occurances_of_string1_in_text_array(text_array)
-    index_range_array = test_search.get_index_range_to_search_for_string2(text_array, string1_occurances_index)
-    locality_search = test_search.is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
+    string1_occurances_index = test_search.get_string1_index_array(text_array)
+    index_range_array = test_search.get_string2_index_range(text_array, string1_occurances_index)
+    locality_search = test_search.string2_search(text_array, index_range_array)
     expect(locality_search). to eq true
   end
 
   it "Return false if string2 if is not within n words of string1" do
     test_search = Search.new(1, 'test_data', 'Logan', 'knows')
     text_array = test_search.get_array_of_words_from_file('test_data/kitties.txt')
-    string1_occurances_index = test_search.get_index_array_of_all_occurances_of_string1_in_text_array(text_array)
-    index_range_array = test_search.get_index_range_to_search_for_string2(text_array, string1_occurances_index)
-    locality_search = test_search.is_string2_located_within_n_words_of_string1?(text_array, index_range_array)
+    string1_occurances_index = test_search.get_string1_index_array(text_array)
+    index_range_array = test_search.get_string2_index_range(text_array, string1_occurances_index)
+    locality_search = test_search.string2_search(text_array, index_range_array)
     expect(locality_search). to eq false
   end
 
