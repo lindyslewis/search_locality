@@ -22,7 +22,7 @@ class Search
 	def get_filepaths_from_dir
 		array_of_filepaths = Dir.glob("#{@directory_path}/*.txt")
 		return array_of_filepaths
-  end
+	end
 
 
 	# For every string in an array, removes all non alphanum
